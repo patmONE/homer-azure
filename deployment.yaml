@@ -1,0 +1,37 @@
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pm1-azure-homer-deployment
+  labels:
+    app: pm1-azure-homer
+spec:
+  replicas: 2  # This means you want to run 2 replicas/pods of your app.
+  selector:
+    matchLabels:
+      app: pm1-azure-homer
+  template:
+    metadata:
+      labels:
+        app: pm1-azure-homer
+    spec:
+      containers:
+      - name: pm1-azure-homer-container
+        image: pm1azure.azurecr.io/pm1-azure-homer-image:v3
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pm1-azure-homer-service
+  labels:
+    app: pm1-azure-homer
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: pm1-azure-homer
+
